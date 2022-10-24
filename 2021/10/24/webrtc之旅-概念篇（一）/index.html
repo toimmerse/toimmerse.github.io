@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"mengtao.live","root":"/","images":"/images","scheme":"Pisces","version":"8.0.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+  </script>
+
+  <meta name="description" content="前言刚开始接触WebRTC肯定会被WebRTC中的许多概念给吓到，不清楚STUN，TURN，ICE，信令这些在WebRTC里面起什么作用，今天这篇文章结合网络查阅的资料以及自己的理解做一些记录，希望对WebRTC初学者一些帮助，如有不正确的地方欢迎指正。这个文档并不包括WebRTC中所有的概念，只对WebRTC建立连接时可能设计到的知识按照自己的理解进行描述。担心某些概念定义错误会误导观看者，文章">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webrtc之旅--概念篇(一)">
+<meta property="og:url" content="http://mengtao.live/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="其境身临">
+<meta property="og:description" content="前言刚开始接触WebRTC肯定会被WebRTC中的许多概念给吓到，不清楚STUN，TURN，ICE，信令这些在WebRTC里面起什么作用，今天这篇文章结合网络查阅的资料以及自己的理解做一些记录，希望对WebRTC初学者一些帮助，如有不正确的地方欢迎指正。这个文档并不包括WebRTC中所有的概念，只对WebRTC建立连接时可能设计到的知识按照自己的理解进行描述。担心某些概念定义错误会误导观看者，文章">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://mengtao.live/image/webrtc/gainian1/rtc_ice_stun_turn.png">
+<meta property="article:published_time" content="2021-10-24T03:02:55.000Z">
+<meta property="article:modified_time" content="2022-10-24T03:54:15.608Z">
+<meta property="article:author" content="immerseve">
+<meta property="article:tag" content="音视频">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://mengtao.live/image/webrtc/gainian1/rtc_ice_stun_turn.png">
+
+
+<link rel="canonical" href="http://mengtao.live/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>webrtc之旅--概念篇(一) | 其境身临</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">其境身临</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">人生的意义在于迷恋上什么</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <section class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NAT"><span class="nav-number">2.</span> <span class="nav-text">NAT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#STUN%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">STUN：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TURN-%E5%8D%8F%E8%AE%AE%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">TURN 协议：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SDP"><span class="nav-number">5.</span> <span class="nav-text">SDP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ICE%EF%BC%9A"><span class="nav-number">6.</span> <span class="nav-text">ICE：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E4%BB%A4-Signaling-%EF%BC%9A"><span class="nav-number">7.</span> <span class="nav-text">信令(Signaling)：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </section>
+        <!--/noindex-->
+
+        <section class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="immerseve"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">immerseve</p>
+  <div class="site-description" itemprop="description">凡所有相，皆是虚妄</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </section>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://mengtao.live/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="immerseve">
+      <meta itemprop="description" content="凡所有相，皆是虚妄">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="其境身临">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          webrtc之旅--概念篇(一)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-10-24 11:02:55" itemprop="dateCreated datePublished" datetime="2021-10-24T11:02:55+08:00">2021-10-24</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2022-10-24 11:54:15" itemprop="dateModified" datetime="2022-10-24T11:54:15+08:00">2022-10-24</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/WebRTC/" itemprop="url" rel="index"><span itemprop="name">WebRTC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>刚开始接触WebRTC肯定会被WebRTC中的许多概念给吓到，不清楚STUN，TURN，ICE，信令这些在WebRTC里面起什么作用，今天这篇文章结合网络查阅的资料以及自己的理解做一些记录，希望对WebRTC初学者一些帮助，如有不正确的地方欢迎指正。<br>这个文档并不包括WebRTC中所有的概念，只对WebRTC建立连接时可能设计到的知识按照自己的理解进行描述。担心某些概念定义错误会误导观看者，文章中引用许多百度百科的官方描述，引用内容使用灰色区分，但并不表示这些内容不重要，相反我认为是认识这些概念最重要的部分。<br>下面就开始WebRTC之旅建立连接篇。<br>WebRTC建联流程<br>WebRTC是一种实时通讯技术，那首先要解决的是两个端如何建立连接的问题，需要说明的是两个端建立连接的过程相对来说也并不是那么简单(如下图)。<br><img src="/image/webrtc/gainian1/rtc_ice_stun_turn.png" alt="图片"></p>
+<a id="more"></a>
+<p>我们先从图中的NAT说起，再到如何解决NAT问题，再到ICE，最后再到信令服务器</p>
+<h3 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h3><p>WebRTC要进行端到端的通讯，最简单的方式是通讯双方知道对方的IP，通过IP直连，减少使用服务器进行数据的中转，但是实际并非如此，在实际的场景中，我们的每个客户端都是在局域网(由多台计算机或者称为客户端之间相互连成一个计算机组)内部的，对外的IP(公网IP)只有一个，内网IP是不能直接被公网访问的，那么两个客户端都处于局域网内部，如何让两个处于局域网内部的IP直接进行互相通讯呢？这个时候就需要用到NAT穿透技术了。<br>首先先了解下什么是NAT？<br>NAT（Network Address Translation），是指网络地址转换，1994年提出的。<br>当在专用网内部的一些主机本来已经分配到了本地IP地址（即仅在本专用网内使用的专用地址），但又想和因特网上的主机通信（并不需要加密）时，可使用NAT方法。<br>这种方法需要在专用网（私网IP）连接到因特网（公网IP）的路由器上安装NAT软件。装有NAT软件的路由器叫做NAT路由器，它至少有一个有效的外部全球IP地址（公网IP地址）。这样，所有使用本地地址（私网IP地址）的主机在和外界通信时，都要在NAT路由器上将其本地地址转换成全球IP地址，才能和因特网连接。<br>另外，这种通过使用少量的全球IP地址（公网IP地址）代表较多的私有IP地址的方式，将有助于减缓可用的IP地址空间的枯竭。在RFC 2663中有对NAT的说明<br>NAT功能之一：NAT 之内的 PC 联机到 Internet 上面时，他所显示的 IP 是 NAT 主机的公共 IP，所以 Client 端的 PC 当然就具有一定程度的安全了，外界在进行 portscan（端口扫描） 的时候，就侦测不到源Client 端的 PC 。– 百度百科<br>简单来说NAT做了公网IP与内网IP的地址转换，这个可以解决IP地址不够用及安全问题，但是这也为端到端直连带来了问题，处于局域网内部的两个客户端无法直接通过IP进行相互访问，这个时候就要用NAT穿透技术来解决这个问题，解决方案主要使用STUN和TURN协议。</p>
+<h3 id="STUN："><a href="#STUN：" class="headerlink" title="STUN："></a>STUN：</h3><p>STUN（Session Traversal Utilities for NAT，NAT会话穿越应用程序）是一种网络协议，它允许位于NAT（或多重NAT）后的客户端找出自己的公网地址，查出自己位于哪种类型的NAT之后以及NAT为某一个本地端口所绑定的Internet端端口。这些信息被用来在两个同时处于NAT路由器之后的主机之间创建UDP通信。该协议由RFC 5389定义。<br>作用：简单来说是获得局域网内部客户端的公网IP。 —百度百科<br>简单来说STUN 是为了让位于局域网内部的客户端找出公网IP而定义的一种协议，那大概是如何实现的呢？<br>STUN技术需要一个位于公网的Server(STUN Server)，这个Server实现了客户机-服务器协议(该协议见RFC5389)，一个客户端主动向服务器发送请求，之后，服务器会向客户端报告NAT路由器的公网IP地址以及NAT为允许数据传回到内网而开通的端口，这个过程让客户端能够确定使用的NAT类型，因为不同的NAT类型处理传入的UDP分组方式不同。有4种方式其中三种是可以使用的，完全圆锥型NAT，受限圆锥型NAT和端口受限圆锥型NAT，但是大型公司网络中经常采用对称性NAT，这种NAT是不可用的（对称型NAT要求发送端内网IP端口号要与对端IP端口号一一对应，因此使用STUN Server获取的端口号会失效，不能转接给其他不同IP的端进行使用），那解决这个问题需要用到另外一种协议——TURN协议</p>
+<h3 id="TURN-协议："><a href="#TURN-协议：" class="headerlink" title="TURN 协议："></a>TURN 协议：</h3><p>turn是网络协议，又称SPAN(Simple Protocol for Augmenting NATs）方式。<br>TURN协议允许NAT或者防火墙后面的对象可以通过TCP或者UDP接收到数据。这在使用了对称式的NAT（或者防火墙）的网络中尤其具有实用价值 [1] 。<br>TURN方式解决NAT问题的思路与STUN相似，是基于私网接入用户通过某种机制预先得到其私有地址对应在公网的地址（STUN方式得到的地址为出口NAT上的地址，TURN方式得到地址为TURNServer上的地址），然后在报文负载中所描述的地址信息直接填写该公网地址的方式，实际应用原理也是一样的。<br>TURN的全称为Traversal Using Relay NAT，即通过Relay方式穿越NAT，TURN应用模型通过分配TURNServer的地址和端口作为客户端对外的接受地址和端口，即私网用户发出的报文都要经过TURNServer进行Relay转发，这种方式应用模型除了具有STUN方式的优点外，还解决了STUN应用无法穿透对称NAT（SymmetricNAT）以及类似的Firewall设备的缺陷，即无论企业网/驻地网出口为哪种类型的NAT/FW，都可以实现NAT的穿透，同时TURN支持基于TCP的应用，如H323协议。此外TURNServer控制分配地址和端口，能分配RTP/RTCP地址对（RTCP端口号为RTP端口号加1）作为本端客户的接受地址，避免了STUN应用模型下出口NAT对RTP/RTCP地址端口号的任意分配，使得客户端无法收到对端发过来的RTCP报文（对端发RTCP报文时，目的端口号缺省按RTP端口号加1发送）<br>TURN的局限性在于所有报文都必须经过TURNServer转发，增大了包的延迟和丢包的可能性。 —— 百度百科<br>面对对称型NAT，STUN不能解决连接问题的时候会用到TURN协议，TURN协议主要的解决方式是通过建立中转服务器，两个通讯端均与中转服务器建立连接，服务器将数据进行转发。<br>由于TURN服务器需要对报文进行转发，会大量占用服务器带宽，成本较高，并且还会引入延迟，因此一般在STUN不可用的情况下才会使用。</p>
+<h3 id="SDP"><a href="#SDP" class="headerlink" title="SDP"></a>SDP</h3><p>SDP协议(Session Description Protocol)会话描述协议。使用文本对媒体信息进行描述。但是其协议本身并不传递媒体数据，只是用于参与媒体会话双方媒体协商。通过交换SDP，会话双方可以知道对方支持的音视频媒体能力如音视频编格式、网络信息等重要信息</p>
+<h3 id="ICE："><a href="#ICE：" class="headerlink" title="ICE："></a>ICE：</h3><p>交互式连接创建（Interactive Connectivity Establishment），一种综合性的NAT穿透的技术。<br>交互式连接创建是由IETF的MMUSIC工作组开发出来的一种framework，可集成各种NAT穿透技术，如STUN、TURN（Traversal Using Relay NAT，中继NAT实现的穿透）、RSIP（Realm Specific IP，特定域IP）等。该framework可以让SIP的客户端利用各种NAT穿透方式打穿远程的防火墙。 – 百度百科<br>ICE是一种端到端交互的技术，并不是协议。是整合了各种NAT穿透的技术，如STUN、TURN等协议的技术。<br>ICE工作步骤是通过STUN/TURN服务获得可用的IP跟端口号（candidate），将这些信息扩展到SDP中，当两个客户端交换了SDP后会对candidate进行连接检测，检测是否可用，检测完成后会使用对应的candidate用于通讯</p>
+<h3 id="信令-Signaling-："><a href="#信令-Signaling-：" class="headerlink" title="信令(Signaling)："></a>信令(Signaling)：</h3><p>WebRTC在音视频传输前需要先建立媒体通道，媒体通道负责音视频数据的传输。如A与B进行交互，需要首先建立媒体通道，建立媒体通道需要相互知道对方的IP与通讯端口，除IP与端口之外还需要知道对方的音视频能力，而这些信息的交互需要一个单独的服务器进行完成，这个服务器就是信令服务器。<br>信令服务器不涉及音视频媒体数据相关的传输工作，只负责建立连接前必要网络信息、媒体能力信息的交换。<br>WebRTC并没有提供这种信息传递机制及标准，开发商或开发人员可以自行搭建服务器，网络协议可以自由选择HTTP，Websocket等方式。<br>信令服务器负责转发的信息主要包括两种信息，一个是媒体信息，另一个是网络信息(candidate，IP和端口等网络信息)，除此之外信令服务器还负责一部分房间管理，IM等功能。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>两个客户端需要通讯，首先要建立连接，建立连接第一步是要拿到对端的IP跟端口号，这些信息称为网络信息，但是由于有NAT的存在，需要使用STUN获取外网IP及端口号，但是STUN只能解决部分NAT情况，解决对称型NAT问题需要使用TURN协议，而ICE就是整合了这两种协议的技术，端到端连接问题。<br>有了IP与端口号后，两个客户端还需要知道对端有什么媒体能力，如能不能发送音频或者视频，有没有对应的音视频编解码等信息，这些信息称为媒体信息。<br>客户端只知道自己本地的网络信息跟媒体信息，那就需要另外一个服务器来完成两个端的信息交换，这个服务器就是信令服务器。客户端根据网络信息与媒体信息生成SDP，并且通过信令服务器将SDP进行交换，告诉对端自己的信息及获取对端信息，<br>附：<br>后面有时间再对本文涉及的协议进行一次深入的分析</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/" rel="tag"># 音视频</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E5%BC%80%E7%AF%87/" rel="prev" title="webrtc之旅--开篇">
+                  <i class="fa fa-chevron-left"></i> webrtc之旅--开篇
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/24/webrtc%E4%B9%8B%E6%97%85-%E4%BB%A3%E7%A0%81%E8%8E%B7%E5%8F%96%E7%BC%96%E8%AF%91%EF%BC%88iOS-Mac%EF%BC%89/" rel="next" title="webrtc之旅--代码获取编译（iOS/Mac）">
+                  webrtc之旅--代码获取编译（iOS/Mac） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">immerseve</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -24,31 +24,34 @@
     var CONFIG = {"hostname":"mengtao.live","root":"/","images":"/images","scheme":"Pisces","version":"8.0.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
 
-  <meta name="description" content="凡所有相，皆是虚妄">
-<meta property="og:type" content="website">
-<meta property="og:title" content="其境身临">
-<meta property="og:url" content="http://mengtao.live/index.html">
+  <meta name="description" content="前言WebRTC 至2011年开源到现在已经过10多年的发展，目前在很多场景都有应用，如会议，娱乐，教育等。从事音视频通讯相关的开发人员几乎所有人都听说过WebRTC，WebRTC之所以如此流行，我的理解是除了现在音视频行业的火热外，WebRTC包含了太多关于音视频相关的知识，从音视频采集，到音视频编解码，再到音视频传输，WebRTC像是一个百宝箱，几乎涵盖了所有有关音视频通讯相关的技术。另外，W">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webrtc之旅--开篇">
+<meta property="og:url" content="http://mengtao.live/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E5%BC%80%E7%AF%87/index.html">
 <meta property="og:site_name" content="其境身临">
-<meta property="og:description" content="凡所有相，皆是虚妄">
+<meta property="og:description" content="前言WebRTC 至2011年开源到现在已经过10多年的发展，目前在很多场景都有应用，如会议，娱乐，教育等。从事音视频通讯相关的开发人员几乎所有人都听说过WebRTC，WebRTC之所以如此流行，我的理解是除了现在音视频行业的火热外，WebRTC包含了太多关于音视频相关的知识，从音视频采集，到音视频编解码，再到音视频传输，WebRTC像是一个百宝箱，几乎涵盖了所有有关音视频通讯相关的技术。另外，W">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-24T03:02:52.000Z">
+<meta property="article:modified_time" content="2022-10-24T04:59:13.778Z">
 <meta property="article:author" content="immerseve">
+<meta property="article:tag" content="音视频">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://mengtao.live/">
+<link rel="canonical" href="http://mengtao.live/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E5%BC%80%E7%AF%87/">
 
 
 <script class="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>其境身临</title>
+  <title>webrtc之旅--开篇 | 其境身临</title>
   
 
 
@@ -164,7 +167,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -177,6 +180,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <section class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebRTC"><span class="nav-number">2.</span> <span class="nav-text">WebRTC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9F%B3%E8%A7%86%E9%A2%91%E9%A2%86%E5%9F%9F%E5%8F%91%E5%B1%95"><span class="nav-number">3.</span> <span class="nav-text">音视频领域发展</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8E%E7%BB%AD"><span class="nav-number">4.</span> <span class="nav-text">后续</span></a></li></ol></div>
         </section>
         <!--/noindex-->
 
@@ -240,181 +244,12 @@
 </noscript>
 
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
       
 
       
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://mengtao.live/2022/10/24/webrtc%E4%B9%8B%E6%97%85-%E4%BB%A3%E7%A0%81%E8%8E%B7%E5%8F%96%E7%BC%96%E8%AF%91%EF%BC%88iOS-Mac%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="immerseve">
-      <meta itemprop="description" content="凡所有相，皆是虚妄">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="其境身临">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/24/webrtc%E4%B9%8B%E6%97%85-%E4%BB%A3%E7%A0%81%E8%8E%B7%E5%8F%96%E7%BC%96%E8%AF%91%EF%BC%88iOS-Mac%EF%BC%89/" class="post-title-link" itemprop="url">webrtc之旅--代码获取编译（iOS/Mac）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-10-24 11:20:32 / 修改时间：11:53:58" itemprop="dateCreated datePublished" datetime="2022-10-24T11:20:32+08:00">2022-10-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/WebRTC/" itemprop="url" rel="index"><span itemprop="name">WebRTC</span></a>
-        </span>
-    </span>
 
   
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>WebRTC是代码是开源的，要学习WebRTC第一个问题是得有源码，没有源码看不到真相！！！那这篇文章就来记录下WebRTC源码下载及本地代码编译。<br>如果源码点个连接就能顺利下载并且再点个按钮就能让程序跑起来，那就太爽了，但是，有但是的地方就有不好的预兆，各位客官请接着往下看。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/24/webrtc%E4%B9%8B%E6%97%85-%E4%BB%A3%E7%A0%81%E8%8E%B7%E5%8F%96%E7%BC%96%E8%AF%91%EF%BC%88iOS-Mac%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://mengtao.live/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="immerseve">
-      <meta itemprop="description" content="凡所有相，皆是虚妄">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="其境身临">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">webrtc之旅--概念篇(一)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-10-24 11:02:55" itemprop="dateCreated datePublished" datetime="2021-10-24T11:02:55+08:00">2021-10-24</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2022-10-24 11:54:15" itemprop="dateModified" datetime="2022-10-24T11:54:15+08:00">2022-10-24</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/WebRTC/" itemprop="url" rel="index"><span itemprop="name">WebRTC</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>刚开始接触WebRTC肯定会被WebRTC中的许多概念给吓到，不清楚STUN，TURN，ICE，信令这些在WebRTC里面起什么作用，今天这篇文章结合网络查阅的资料以及自己的理解做一些记录，希望对WebRTC初学者一些帮助，如有不正确的地方欢迎指正。<br>这个文档并不包括WebRTC中所有的概念，只对WebRTC建立连接时可能设计到的知识按照自己的理解进行描述。担心某些概念定义错误会误导观看者，文章中引用许多百度百科的官方描述，引用内容使用灰色区分，但并不表示这些内容不重要，相反我认为是认识这些概念最重要的部分。<br>下面就开始WebRTC之旅建立连接篇。<br>WebRTC建联流程<br>WebRTC是一种实时通讯技术，那首先要解决的是两个端如何建立连接的问题，需要说明的是两个端建立连接的过程相对来说也并不是那么简单(如下图)。<br><img src="/image/webrtc/gainian1/rtc_ice_stun_turn.png" alt="图片"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
 
 
 <div class="post-block">
@@ -434,10 +269,9 @@
       <meta itemprop="name" content="其境身临">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E5%BC%80%E7%AF%87/" class="post-title-link" itemprop="url">webrtc之旅--开篇</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          webrtc之旅--开篇
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -476,16 +310,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>WebRTC 至2011年开源到现在已经过10多年的发展，目前在很多场景都有应用，如会议，娱乐，教育等。从事音视频通讯相关的开发人员几乎所有人都听说过WebRTC，WebRTC之所以如此流行，我的理解是除了现在音视频行业的火热外，WebRTC包含了太多关于音视频相关的知识，从音视频采集，到音视频编解码，再到音视频传输，WebRTC像是一个百宝箱，几乎涵盖了所有有关音视频通讯相关的技术。另外，WebRTC跨平台的特性也带动了各个平台开发人员的参与。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E5%BC%80%E7%AF%87/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>WebRTC 至2011年开源到现在已经过10多年的发展，目前在很多场景都有应用，如会议，娱乐，教育等。从事音视频通讯相关的开发人员几乎所有人都听说过WebRTC，WebRTC之所以如此流行，我的理解是除了现在音视频行业的火热外，WebRTC包含了太多关于音视频相关的知识，从音视频采集，到音视频编解码，再到音视频传输，WebRTC像是一个百宝箱，几乎涵盖了所有有关音视频通讯相关的技术。另外，WebRTC跨平台的特性也带动了各个平台开发人员的参与。</p>
+<a id="more"></a>
+<h3 id="WebRTC"><a href="#WebRTC" class="headerlink" title="WebRTC"></a>WebRTC</h3><p>WebRTC (Web Real-Time Communications) 是一项实时通讯技术，它允许网络应用或者站点，在不借助中间媒介的情况下，建立浏览器之间点对点（Peer-to-Peer）的连接，实现视频流和（或）音频流或者其他任意数据的传输。WebRTC 包含的这些标准使用户在无需安装任何插件或者第三方的软件的情况下，创建点对点（Peer-to-Peer）的数据分享和电话会议成为可能。 — 百度百科</p>
+<p>WebRTC是 Web 实时通讯 (Web Real-Time Communications) 缩写，是一个支持在网页浏览器进行音视频实时通讯技术。2010年Google收购了GIPS公司获得该技术，并于2011年6月开源，主要由Google，Mozilla，Opera维护，后被纳入W3C(万维网联盟）标准。<br>WebRTC提供了音视频通话的核心技术，包括音视频采集，编解码、网络传输、显示等功能，并且支持跨平台，支持Windows、Linux、Mac、Android、iOS等平台。</p>
+<h3 id="音视频领域发展"><a href="#音视频领域发展" class="headerlink" title="音视频领域发展"></a>音视频领域发展</h3><p>WebRTC技术的开源很大的促进了音视频实时通讯行业的发展，在直播领域，WebRTC极大的减少了端到端的延迟，短延时直播应运而生，极大的提高了直播观看，连麦场景的用户体验。在视频会议、娱乐、教育、智能硬件、云游戏等行业，WebRTC也有极大的发挥空间。但是WebRTC是一个庞大的视频通讯引擎，需要网络，音视频，编解码等开发人员，要成立一个音视频团队需要投入很大的开发成本，基于这个原因，大多数没有自主研发能力的公司均会选择运营厂商提供的SDK服务，国内外许多云供应商，如阿里、腾讯、网易、字节等大厂都在对外提供音视频SDK服务，国内最早做WebRTC供应商声网也在前两年完成了上市。<br>最近云游戏、原宇宙、包括智能驾驶都开始使用WebRTC技术，我自己对WebRTC未来的发展也是持积极态度，WebRTC 将会运用到各个行业及场景来满足人们对实时交互体验的需求。</p>
+<h3 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h3><p>至2017年接触WebRTC到现在已有5年有余，之前在工作中忙于各种业务开发，性能优化，bug排查定位，没有抽出时间对已了解的知识做一个整理及回顾，最近计划抽出一些时间整理一些文档，对现有知识做一次梳理与分享。<br>后面计划从WebRTC中涉及的概念开始，到WebRTC本地程序搭建，源码剖析各个方面对WebRTC做一次深度学习</p>
+
     </div>
 
     
@@ -493,17 +324,27 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          <div class="post-tags">
+              <a href="/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/" rel="tag"># 音视频</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/" rel="next" title="webrtc之旅--概念篇(一)">
+                  webrtc之旅--概念篇(一) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
     </footer>
   </article>
 </div>
 
 
 
-
-
-  
 
 
 
