@@ -375,6 +375,17 @@
 
   
 
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({"enable":true,"appId":"prTJ9tKxAMWltR3lQ5rfEFy9-gzGzoHsz","appKey":"GfxCN9urirRGeA5SSsSi9oMI","serverURLs":"https://mengtao.live","placeholder":"昵称为必填选项，填写邮箱可以收到消息回复哦！！！","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":null,"visitor":true,"comment_count":true,"recordIP":false,"enableQQ":false,"requiredFields":[]}, {
+      el: '#valine-comments',
+      path: "/tags/%E9%98%85%E8%AF%BB/",
+      serverURLs: "https://mengtao.live"
+    }));
+  }, window.Valine);
+});
+</script>
 
 </body>
 </html>
