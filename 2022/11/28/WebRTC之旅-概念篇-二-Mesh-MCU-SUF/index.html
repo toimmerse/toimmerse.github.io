@@ -24,21 +24,25 @@
     var CONFIG = {"hostname":"mengtao.live","root":"/","images":"/images","scheme":"Pisces","version":"8.0.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"valine":{"order":-1}},"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
 
-  <meta name="description" content="前言WebRTC 至2011年开源到现在已经过10多年的发展，目前在很多场景都有应用，如会议，娱乐，教育等。从事音视频通讯相关的开发人员几乎所有人都听说过WebRTC，WebRTC之所以如此流行，我的理解是除了现在音视频行业的火热外，WebRTC包含了太多关于音视频相关的知识，从音视频采集，到音视频编解码，再到音视频传输，WebRTC像是一个百宝箱，几乎涵盖了所有有关音视频通讯相关的技术。另外，W">
+  <meta name="description" content="前言WebRTC服务端常见的三种架构模式，Mesh，MCU，SFU">
 <meta property="og:type" content="article">
-<meta property="og:title" content="webrtc之旅--开篇">
-<meta property="og:url" content="http://mengtao.live/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E5%BC%80%E7%AF%87/index.html">
+<meta property="og:title" content="WebRTC之旅--概念篇(二)Mesh&#x2F;MCU&#x2F;SUF">
+<meta property="og:url" content="http://mengtao.live/2022/11/28/WebRTC%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87-%E4%BA%8C-Mesh-MCU-SUF/index.html">
 <meta property="og:site_name" content="其境身临">
-<meta property="og:description" content="前言WebRTC 至2011年开源到现在已经过10多年的发展，目前在很多场景都有应用，如会议，娱乐，教育等。从事音视频通讯相关的开发人员几乎所有人都听说过WebRTC，WebRTC之所以如此流行，我的理解是除了现在音视频行业的火热外，WebRTC包含了太多关于音视频相关的知识，从音视频采集，到音视频编解码，再到音视频传输，WebRTC像是一个百宝箱，几乎涵盖了所有有关音视频通讯相关的技术。另外，W">
+<meta property="og:description" content="前言WebRTC服务端常见的三种架构模式，Mesh，MCU，SFU">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-10-24T03:02:52.000Z">
-<meta property="article:modified_time" content="2022-10-24T04:59:13.778Z">
+<meta property="og:image" content="http://mengtao.live/image/webrtc/gainian2/mesh_image.png">
+<meta property="og:image" content="http://mengtao.live/image/webrtc/gainian2/mcu_image.png">
+<meta property="og:image" content="http://mengtao.live/image/webrtc/gainian2/sfu_image.png">
+<meta property="article:published_time" content="2022-11-28T04:01:57.000Z">
+<meta property="article:modified_time" content="2022-11-28T09:55:31.029Z">
 <meta property="article:author" content="immersive">
 <meta property="article:tag" content="音视频">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://mengtao.live/image/webrtc/gainian2/mesh_image.png">
 
 
-<link rel="canonical" href="http://mengtao.live/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E5%BC%80%E7%AF%87/">
+<link rel="canonical" href="http://mengtao.live/2022/11/28/WebRTC%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87-%E4%BA%8C-Mesh-MCU-SUF/">
 
 
 <script class="page-configurations">
@@ -51,7 +55,7 @@
   };
 </script>
 
-  <title>webrtc之旅--开篇 | 其境身临</title>
+  <title>WebRTC之旅--概念篇(二)Mesh/MCU/SUF | 其境身临</title>
   
 
 
@@ -185,7 +189,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <section class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebRTC"><span class="nav-number">2.</span> <span class="nav-text">WebRTC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9F%B3%E8%A7%86%E9%A2%91%E9%A2%86%E5%9F%9F%E5%8F%91%E5%B1%95"><span class="nav-number">3.</span> <span class="nav-text">音视频领域发展</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8E%E7%BB%AD"><span class="nav-number">4.</span> <span class="nav-text">后续</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mesh"><span class="nav-number">2.</span> <span class="nav-text">Mesh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MCU"><span class="nav-number">3.</span> <span class="nav-text">MCU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SFU"><span class="nav-number">4.</span> <span class="nav-text">SFU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
         </section>
         <!--/noindex-->
 
@@ -262,7 +266,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://mengtao.live/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E5%BC%80%E7%AF%87/">
+    <link itemprop="mainEntityOfPage" href="http://mengtao.live/2022/11/28/WebRTC%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87-%E4%BA%8C-Mesh-MCU-SUF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -275,7 +279,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          webrtc之旅--开篇
+          WebRTC之旅--概念篇(二)Mesh/MCU/SUF
         </h1>
 
         <div class="post-meta-container">
@@ -285,16 +289,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2021-10-24 11:02:52" itemprop="dateCreated datePublished" datetime="2021-10-24T11:02:52+08:00">2021-10-24</time>
+      <time title="创建时间：2022-11-28 12:01:57 / 修改时间：17:55:31" itemprop="dateCreated datePublished" datetime="2022-11-28T12:01:57+08:00">2022-11-28</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2022-10-24 12:59:13" itemprop="dateModified" datetime="2022-10-24T12:59:13+08:00">2022-10-24</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -306,7 +304,7 @@
     </span>
 
   
-    <span id="/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E5%BC%80%E7%AF%87/" class="post-meta-item leancloud_visitors" data-flag-title="webrtc之旅--开篇" title="阅读次数">
+    <span id="/2022/11/28/WebRTC%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87-%E4%BA%8C-Mesh-MCU-SUF/" class="post-meta-item leancloud_visitors" data-flag-title="WebRTC之旅--概念篇(二)Mesh/MCU/SUF" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -321,8 +319,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E5%BC%80%E7%AF%87/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E5%BC%80%E7%AF%87/" itemprop="commentCount"></span>
+    <a title="valine" href="/2022/11/28/WebRTC%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87-%E4%BA%8C-Mesh-MCU-SUF/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/11/28/WebRTC%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87-%E4%BA%8C-Mesh-MCU-SUF/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -336,12 +334,38 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>WebRTC 至2011年开源到现在已经过10多年的发展，目前在很多场景都有应用，如会议，娱乐，教育等。从事音视频通讯相关的开发人员几乎所有人都听说过WebRTC，WebRTC之所以如此流行，我的理解是除了现在音视频行业的火热外，WebRTC包含了太多关于音视频相关的知识，从音视频采集，到音视频编解码，再到音视频传输，WebRTC像是一个百宝箱，几乎涵盖了所有有关音视频通讯相关的技术。另外，WebRTC跨平台的特性也带动了各个平台开发人员的参与。</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>WebRTC服务端常见的三种架构模式，Mesh，MCU，SFU</p>
 <a id="more"></a>
-<h3 id="WebRTC"><a href="#WebRTC" class="headerlink" title="WebRTC"></a>WebRTC</h3><p>WebRTC (Web Real-Time Communications) 是一项实时通讯技术，它允许网络应用或者站点，在不借助中间媒介的情况下，建立浏览器之间点对点（Peer-to-Peer）的连接，实现视频流和（或）音频流或者其他任意数据的传输。WebRTC 包含的这些标准使用户在无需安装任何插件或者第三方的软件的情况下，创建点对点（Peer-to-Peer）的数据分享和电话会议成为可能。 — 百度百科</p>
-<p>WebRTC是 Web 实时通讯 (Web Real-Time Communications) 缩写，是一个支持在网页浏览器进行音视频实时通讯技术。2010年Google收购了GIPS公司获得该技术，并于2011年6月开源，主要由Google，Mozilla，Opera维护，后被纳入W3C(万维网联盟）标准。<br>WebRTC提供了音视频通话的核心技术，包括音视频采集，编解码、网络传输、显示等功能，并且支持跨平台，支持Windows、Linux、Mac、Android、iOS等平台。</p>
-<h3 id="音视频领域发展"><a href="#音视频领域发展" class="headerlink" title="音视频领域发展"></a>音视频领域发展</h3><p>WebRTC技术的开源很大的促进了音视频实时通讯行业的发展，在直播领域，WebRTC极大的减少了端到端的延迟，短延时直播应运而生，极大的提高了直播观看，连麦场景的用户体验。在视频会议、娱乐、教育、智能硬件、云游戏等行业，WebRTC也有极大的发挥空间。但是WebRTC是一个庞大的视频通讯引擎，需要网络，音视频，编解码等开发人员，要成立一个音视频团队需要投入很大的开发成本，基于这个原因，大多数没有自主研发能力的公司均会选择运营厂商提供的SDK服务，国内外许多云供应商，如阿里、腾讯、网易、字节等大厂都在对外提供音视频SDK服务，国内最早做WebRTC供应商声网也在前两年完成了上市。<br>最近云游戏、原宇宙、包括智能驾驶都开始使用WebRTC技术，我自己对WebRTC未来的发展也是持积极态度，WebRTC 将会运用到各个行业及场景来满足人们对实时交互体验的需求。</p>
-<h3 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h3><p>至2017年接触WebRTC到现在已有5年有余，之前在工作中忙于各种业务开发，性能优化，bug排查定位，没有抽出时间对已了解的知识做一个整理及回顾，最近计划抽出一些时间整理一些文档，对现有知识做一次梳理与分享。<br>后面计划从WebRTC中涉及的概念开始，到WebRTC本地程序搭建，源码剖析各个方面对WebRTC做一次深度学习</p>
+<h3 id="Mesh"><a href="#Mesh" class="headerlink" title="Mesh"></a>Mesh</h3><p>这种方案比较简单，但是也极少使用，简单的说就是端到端进行通讯的时候进行直接连接，中间无服务器对数据的进行转发，两个端或者多个端之间通过NAT打洞获得到对方的IP及端口号后进行直接连接，如下图：<br><img src="/image/webrtc/gainian2/mesh_image.png" alt="mesh_image"></p>
+<p>优点：</p>
+<ul>
+<li>无服务器进行数据中转，STUN/TURN 只进行NAT穿透</li>
+<li>这种架构模式无需开发媒体中转服务器，所以无论开发成本还是服务器成本都比较低</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>使用Mesh架构时如果进行多人通讯的时候，其中任何一端都需要向会议中的每个端发送音视频数据，增加了客户端带宽要求，另外每个端都需要建立多个音视频流的解码器，对端性能要求比较高，低端及比较低端手机性能基本无法满足，同样带宽要求过高会引起卡顿等问题。</li>
+</ul>
+<h3 id="MCU"><a href="#MCU" class="headerlink" title="MCU"></a>MCU</h3><p>MCU（Multipoint Control Unit）是比较传统的中心化网络结构，音视频参会者只与MCU媒体服务器进行连接，只将音视频数据推送到MCU媒体服务器，MCU媒体服务器负责将所以参会者的视频进行混合，混合后生成包含所有参会者的视频流，将混合后的视频推送到其他参会者。如下图：<br><img src="/image/webrtc/gainian2/mcu_image.png" alt="mcu_image"><br>优点：</p>
+<ul>
+<li>使用MCU架构，参会者只需要推送一路音视频流到MCU媒体服务器，同样拉流也只有一路，与Mesh相比减轻了参会终端的带宽要求及性能消耗</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>MCU架构中减轻的网络及性能消耗都转嫁到了MCU媒体服务器，MCU需要接收每一路音视频流，并且对音视频流进行转码，解码，混流，再重新编码，这个过程会增加服务器压力，也会造成延时，另外如果业务需要对视频画面进行不同布局的话，MCU也需要支持，实现起来比较麻烦。</li>
+</ul>
+<h3 id="SFU"><a href="#SFU" class="headerlink" title="SFU"></a>SFU</h3><p>SFU（Selective Forwarding Unit）架构相对来说是一种折中的方案，与MCU类似是一个中心化网络架构，但是相比MUC在SUF架构中服务器只进行媒体数据的转发，没有多余的编解码等动作，减轻了服务器的压力。<br>相较Mesh架构中客户端需要向每个参会者推送视频来说，SFU架构中客户端只需要一路上行到SFU，但是下行链路数不会减少。<br><img src="/image/webrtc/gainian2/sfu_image.png" alt="sfu_image"></p>
+<p>优点：</p>
+<ul>
+<li>SFU 只对媒体数据进行转发，没有经过多余的编解码及混流步骤，可以减少CPU消耗，不会产生过多的时间消耗增加延迟</li>
+<li>SFU 架构比较灵活，可以在服务端进行按需数据转发，如推流端推送不同分辨率的视频流到SFU，拉流端根据实际带宽情况按需订阅不同分辨率的视频流（Simulcast）</li>
+<li>SFU 是现在比较流行的架构，有很多开源框架可以使用，如Janus, Mediasoup等</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>Mesh：真实场景使用很少</li>
+<li>MCU：可以根据业务场景需要选择使用</li>
+<li>SFU：目前比较流行，涉及多方通讯的场景基本都是使用SFU架构，SFU配合Simulcast，SVC可以提高音视频服务质量</li>
+</ul>
 
     </div>
 
@@ -358,14 +382,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/10/10/%E3%80%8A%E5%BD%93%E4%B8%8B%E7%9A%84%E5%8A%9B%E9%87%8F%E3%80%8B%E9%98%85%E8%AF%BB/" rel="prev" title="《当下的力量》阅读">
-                  <i class="fa fa-chevron-left"></i> 《当下的力量》阅读
+                <a href="/2022/10/24/webrtc%E4%B9%8B%E6%97%85-%E4%BB%A3%E7%A0%81%E8%8E%B7%E5%8F%96%E7%BC%96%E8%AF%91%EF%BC%88iOS-Mac%EF%BC%89/" rel="prev" title="webrtc之旅--代码获取编译（iOS/Mac）">
+                  <i class="fa fa-chevron-left"></i> webrtc之旅--代码获取编译（iOS/Mac）
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/" rel="next" title="webrtc之旅--概念篇(一)">
-                  webrtc之旅--概念篇(一) <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -467,7 +488,7 @@ NexT.utils.loadComments('#valine-comments', () => {
   NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.1/dist/Valine.min.js', () => {
     new Valine(Object.assign({"enable":true,"appId":"prTJ9tKxAMWltR3lQ5rfEFy9-gzGzoHsz","appKey":"GfxCN9urirRGeA5SSsSi9oMI","serverURLs":"https://prtj9tkx.lc-cn-n1-shared.com","placeholder":"昵称为必填选项，填写邮箱可以收到消息回复哦！！！","avatar":"wavatar","meta":["nick","mail","link"],"pageSize":10,"lang":null,"visitor":true,"comment_count":true,"recordIP":false,"enableQQ":false,"requiredFields":[]}, {
       el: '#valine-comments',
-      path: "/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E5%BC%80%E7%AF%87/",
+      path: "/2022/11/28/WebRTC%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87-%E4%BA%8C-Mesh-MCU-SUF/",
       serverURLs: "https://prtj9tkx.lc-cn-n1-shared.com"
     }));
   }, window.Valine);
