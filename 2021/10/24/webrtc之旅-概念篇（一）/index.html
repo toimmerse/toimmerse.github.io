@@ -21,26 +21,26 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"mengtao.live","root":"/","images":"/images","scheme":"Pisces","version":"8.0.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"valine":{"order":-1}},"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+    var CONFIG = {"hostname":"mengtao.fun","root":"/","images":"/images","scheme":"Pisces","version":"8.0.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"valine":{"order":-1}},"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
 
   <meta name="description" content="前言刚开始接触WebRTC肯定会被WebRTC中的许多概念给吓到，不清楚STUN，TURN，ICE，信令这些在WebRTC里面起什么作用，今天这篇文章结合网络查阅的资料以及自己的理解做一些记录，希望对WebRTC初学者一些帮助，如有不正确的地方欢迎指正。这个文档并不包括WebRTC中所有的概念，只对WebRTC建立连接时可能设计到的知识按照自己的理解进行描述。担心某些概念定义错误会误导观看者，文章">
 <meta property="og:type" content="article">
 <meta property="og:title" content="webrtc之旅--概念篇(一)">
-<meta property="og:url" content="http://mengtao.live/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:url" content="http://mengtao.fun/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
 <meta property="og:site_name" content="其境身临">
 <meta property="og:description" content="前言刚开始接触WebRTC肯定会被WebRTC中的许多概念给吓到，不清楚STUN，TURN，ICE，信令这些在WebRTC里面起什么作用，今天这篇文章结合网络查阅的资料以及自己的理解做一些记录，希望对WebRTC初学者一些帮助，如有不正确的地方欢迎指正。这个文档并不包括WebRTC中所有的概念，只对WebRTC建立连接时可能设计到的知识按照自己的理解进行描述。担心某些概念定义错误会误导观看者，文章">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://mengtao.live/image/webrtc/gainian1/rtc_ice_stun_turn.png">
+<meta property="og:image" content="http://mengtao.fun/image/webrtc/gainian1/rtc_ice_stun_turn.png">
 <meta property="article:published_time" content="2021-10-24T03:02:55.000Z">
 <meta property="article:modified_time" content="2022-10-24T03:54:15.608Z">
 <meta property="article:author" content="immersive">
 <meta property="article:tag" content="音视频">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://mengtao.live/image/webrtc/gainian1/rtc_ice_stun_turn.png">
+<meta name="twitter:image" content="http://mengtao.fun/image/webrtc/gainian1/rtc_ice_stun_turn.png">
 
 
-<link rel="canonical" href="http://mengtao.live/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/">
+<link rel="canonical" href="http://mengtao.fun/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/">
 
 
 <script class="page-configurations">
@@ -264,7 +264,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://mengtao.live/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="http://mengtao.fun/2021/10/24/webrtc%E4%B9%8B%E6%97%85-%E6%A6%82%E5%BF%B5%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -420,7 +420,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
